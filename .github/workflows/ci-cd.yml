@@ -1,0 +1,61 @@
+name: Solar System CI/CD
+
+# on lists the GitHub events that start this workflow.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# jobs contains the separate pieces of work GitHub will run.
+jobs:
+  test:
+    # runs-on chooses the computer that runs these steps.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # steps are the ordered tasks in this job.
+      - name: Check out the repository
+        # uses runs a published action maintained for GitHub Actions.
+        uses: actions/checkout@v7.0.1
+      - name: Set up Node.js 26
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 26
+          cache: npm
+      - name: Install dependencies
+        # run executes a shell command on the runner.
+        run: npm ci
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    needs: test
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: true
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7.0.1
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6.0.0
+      - name: Upload the public website
+        uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: public
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1
