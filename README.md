@@ -144,18 +144,3 @@ Open `.github/workflows/ci-cd.yml`:
 - **Old browser content:** hard refresh the page or try a private window. Wait for the deployment job to finish before checking the online site.
 - **Repository-subpath URL problems:** keep frontend asset and data URLs relative, like `./styles.css` and `./data/planets.json`. Avoid leading-slash URLs like `/data/planets.json`, which point to the domain root rather than your project subpath.
 
-## Instructor preparation
-
-To make the starter repository a template, open its GitHub **Settings → General**, find **Template repository**, and enable **Template repository**.
-
-Before the workshop:
-
-- Confirm the template includes this workflow on its `main` branch.
-- Confirm GitHub Actions are allowed for the repository or organization.
-- Enable Pages and select **GitHub Actions** as the source in the template repository.
-- Check that the workflow permissions are available to student repositories.
-- Have students create repositories from the template, then clone their own copies.
-- Test the full pipeline in advance: make a change, push to `main`, verify tests pass, and verify a deployment URL appears.
-- Check that students' repository visibility and GitHub plan support Pages. A public repository works with GitHub Free; private-repository Pages requires an eligible paid plan.
-
-The planet order and brief descriptions were checked against NASA's [planet overview](https://science.nasa.gov/solar-system/planets/) and [Solar System facts](https://science.nasa.gov/solar-system/solar-system-facts/). The CSS colors are illustrative display choices, not claims about exact observed color.
